@@ -1,35 +1,110 @@
-# AIRSCOPE frontend
+# AIRSCOPE Frontend
 
-Four-page Next.js frontend for the AIRSCOPE air-quality project:
+Web dashboard for **AIRSCOPE**, an air-quality monitoring project for West Bengal. It compares and visualizes AQI, PM2.5 and PM10 readings for **Kolkata**, **Howrah** and **Asansol**, using data served by the [AIRSCOPE backend](https://github.com/OriginLab-dev/airscope-backend).
 
-- `/` - Kolkata, Howrah, and Asansol comparison (AQI, PM2.5, PM10)
-- `/kolkata` - detailed Kolkata readings
-- `/howrah` - detailed Howrah readings
-- `/asansol` - detailed Asansol readings
+**Live site:** [airscope-frontend.vercel.app](https://airscope-frontend.vercel.app)
 
-## Run locally
+<!-- TODO: add a screenshot or GIF of the dashboard here -->
+<!-- ![AIRSCOPE dashboard](./docs/screenshot.png) -->
 
-```powershell
+> AQI values are calculated by AIRSCOPE from OpenAQ data using India's CPCB methodology. They are not official CPCB readings.
+
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Side-by-side comparison of Kolkata, Howrah and Asansol (AQI, PM2.5, PM10) |
+| `/kolkata` | Detailed Kolkata readings |
+| `/howrah` | Detailed Howrah readings |
+| `/asansol` | Detailed Asansol readings |
+
+## Tech Stack
+
+| Purpose | Technology |
+|---------|------------|
+| Framework | Next.js 16 (App Router) |
+| UI library | React 19 |
+| Charts | Recharts |
+| 3D graphics | three.js with React Three Fiber |
+| Animation | Motion |
+| Icons | Lucide React |
+| Hosting | Vercel |
+
+## Project Structure
+
+```
+airscope-frontend/
+├── app/              # Routes and pages (App Router)
+├── components/       # Reusable UI components
+├── lib/              # Helpers and API utilities
+├── .env.example      # Environment variable template
+├── next.config.mjs   # Next.js config, including the /api/* proxy rewrite
+└── package.json
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20 or later
+- npm
+- A running AIRSCOPE backend (the default Render deployment works out of the box)
+
+### Installation
+
+```bash
+git clone https://github.com/OriginLab-dev/airscope-frontend.git
+cd airscope-frontend
 npm install
+```
+
+### Run Locally
+
+```bash
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Backend connection
+### Available Scripts
 
-The browser uses same-origin `/api/*` requests. Next.js proxies these requests to the AIRSCOPE backend using `AIRSCOPE_API_BASE_URL` (default: the existing Render service).
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm start` | Run the production build |
+| `npm run lint` | Lint the project with ESLint |
 
-To override it locally, create `.env.local`:
+## Backend Connection
 
-```text
+The browser makes same-origin `/api/*` requests, and Next.js proxies them to the AIRSCOPE backend using the `AIRSCOPE_API_BASE_URL` environment variable (it defaults to the existing Render service).
+
+To point at a different backend locally, create `.env.local`:
+
+```bash
 AIRSCOPE_API_BASE_URL=https://your-render-backend.onrender.com
 ```
 
-This URL is not a secret. Database credentials and API keys must never be placed in this frontend project.
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `AIRSCOPE_API_BASE_URL` | Base URL of the AIRSCOPE backend | No (has a default) |
 
-## Deployment preparation
+> **Security:** the backend URL is not a secret, but database credentials and API keys must never be placed in this frontend project.
 
-For Vercel, set the `AIRSCOPE_API_BASE_URL` environment variable to the Render backend URL. The Next.js rewrite keeps browser requests same-origin, so Vercel preview URLs do not need to be added one by one to backend CORS.
+## Deployment
 
-Before deployment, update the Render backend to include the CORS support committed in `airscope-backend`; it remains useful for direct browser clients and restricts direct cross-origin access through `CORS_ORIGIN`.
+The frontend is deployed on **Vercel**.
+
+1. Import the repository into Vercel.
+2. Set `AIRSCOPE_API_BASE_URL` to your Render backend URL.
+3. Deploy.
+
+Because the Next.js rewrite keeps browser requests same-origin, Vercel preview URLs do not need to be added one by one to the backend's CORS settings. The backend's `CORS_ORIGIN` setting still restricts direct cross-origin access.
+
+## Related Repositories
+
+- [airscope-backend](https://github.com/OriginLab-dev/airscope-backend): Express and MySQL API, OpenAQ importer and AQI calculation
+
+## License
+
+<!-- TODO: add your license, e.g. MIT -->
