@@ -1,2 +1,10 @@
-export function Loading() { return <main className="shell grid min-h-[70vh] place-items-center"><div className="text-center"><div className="mx-auto mb-5 size-10 animate-spin rounded-full border-2 border-[var(--emerald)] border-t-transparent" /><p className="text-sm text-[var(--fog)]">Loading AIRSCOPE readings…</p></div></main>; }
-export function ErrorMessage({ message }) { return <main className="shell grid min-h-[70vh] place-items-center"><section className="glass max-w-lg rounded-3xl p-8 text-center"><p className="eyebrow">Data status</p><h1 className="display mt-3 text-4xl">Reading unavailable</h1><p className="mt-4 text-[var(--fog)]">{message}</p><a className="focus-ring mt-7 inline-block rounded-full bg-[var(--emerald)] px-5 py-3 text-sm font-bold text-[var(--ink)]" href="/">Try again</a></section></main>; }
+export function ReadingStatus({ loading, failures, retry, hasData }) {
+  return <div className="reading-status">
+    <span role="status"><i data-state={failures.length ? 'warning' : loading ? 'loading' : 'ready'} />
+      {loading ? (hasData ? 'Checking for newer readings…' : 'Fetching station readings…')
+        : failures.length ? ('Could not refresh ' + failures.join(', ') + (hasData ? '. Showing available readings.' : '.'))
+        : hasData ? 'Latest available station readings' : 'No station readings available yet.'}
+    </span>
+    {failures.length > 0 && <button type="button" onClick={retry} disabled={loading}>Retry</button>}
+  </div>;
+}
